@@ -1,0 +1,75 @@
+{
+  "seed": 20261001,
+  "_comment": "MoEFactory 默认配置。所有阈值都放这里，代码里不硬编码。",
+
+  "task": {
+    "_comment": "合成语料 = 带域真值的多任务 next-token。内容词表在域之间共享，每个域一个随机错排；任务标签只进路由器、不进专家。于是同一个内容 token 在不同域有不同后继 —— 分化因此成为必需而不是装饰。",
+    "name": "domain-recall",
+    "n_domains": 4,
+    "n_content": 12,
+    "seq_len": 10,
+    "n_train": 48,
+    "n_test": 16
+  },
+
+  "proxy": {
+    "_comment": "所有标本共享同一份训练预算（可比性的前提）。一步 = 一个 batch 的一次更新；batch loss 取平均不取和，否则 grad_clip 会把梯度整体裁掉。180 步是标定出来的：120 步分离度不够（nmi 只有 0.23），240 步以上收益递减而耗时线性增长。",
+    "steps": 180,
+    "lr": 0.2,
+    "batch_size": 10,
+    "momentum": 0.9,
+    "init_scale": 0.1,
+    "grad_clip": 1.0,
+    "eval_every": 30
+  },
+
+  "grid": {
+    "_comment": "扇出网格分两组，每组都是完整笛卡尔积。learned 组扫 aux × top_k × cap；control 组扫 routing × top_k × cap。control 组的 aux 是 N/A（不是 0）—— 把不适用当 0 算进均值会让结论偏移。",
+    "base": {
+      "n_experts": 4,
+      "d_model": 12,
+      "d_ff": 16
+    },
+    "groups": [
+      {
+        "name": "learned",
+        "fixed": {"routing": "learned"},
+        "axes": {
+          "aux_weight": [0.0, 0.02, 0.1, 0.5],
+          "top_k": [1, 2],
+          "capacity_factor": [1.0, 2.0]
+        }
+      },
+      {
+        "name": "control",
+        "fixed": {"aux_weight": 0.0},
+        "axes": {
+          "routing": ["static", "random"],
+          "top_k": [1, 2],
+          "capacity_factor": [1.0, 2.0]
+        }
+      }
+    ]
+  },
+
+  "replication": {
+    "_comment": "多种子复核。单次运行的结果可能是运气，所以把几个「角落」配置各跑 3 个种子，报告 mean/min/max 与「分化成功次数」。对照组是否 0/N 全灭、learned 是否 N/N 全中，是结论强度的关键。",
+    "specs": [
+      "e4-k1-d12-f16-learned-aux0-cap2",
+      "e4-k1-d12-f16-learned-aux0.02-cap2",
+      "e4-k1-d12-f16-learned-aux0.5-cap2",
+      "e4-k1-d12-f16-static-aux0-cap2",
+      "e4-k1-d12-f16-random-aux0-cap2"
+    ],
+    "seeds": [1, 2, 3]
+  },
+
+  "expectations": {
+    "_comment": "验收阈值。写在这里而不是测试里，是为了让「设计期望」和「实测」能在报告里逐条对照。floor_margin 是必需的：domain_blind_floor 是在「每域等权、每 token 等权」下算出来的连续量，而实测 loss 来自有限的评测集，贴边比较会有采样噪声。",
+    "floor_margin": 0.1,
+    "specialized_nmi": 0.25,
+    "control_nmi": 0.15,
+    "balance_perfect": 0.99,
+    "min_specialized_frac": 0.6
+  }
+}

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "moefactory"
+version = "0.1.0"
+description = "MoEFactory —— Token → Expert 的路由系统放大镜（零第三方依赖）"
+# 核心链路只用标准库。requires-python 下限由 math.sumprod 决定（CPython 3.12+），
+# 它是本项目的性能底线：专家前向占总 MACs 的 ~70%，手写三重循环会让整条
+# 24 个配置的网格从 20 秒变成 3 分钟。
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+# 重型接入点一律写成抛 NotImplementedError 的扩展点，不放进核心链路。
+torch = ["torch>=2.2"]
+plot = ["matplotlib>=3.8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
