@@ -36,6 +36,22 @@ from .schema import MoESpec
 DEFAULT_CONFIG = os.path.join("configs", "default.json")
 
 
+def _configure_stdout() -> None:
+    """非 UTF-8 控制台遇到不可编码字符时「替换」，不要直接崩。
+
+    Windows 默认控制台是 GBK，结论里的 ``↔``（U+2194）不在 GBK 中，``print``
+    会抛 ``UnicodeEncodeError`` —— 一条只读命令因为一个箭头而失败。这里只放宽
+    错误处理、不改编码：控制台能显示的字符照常显示，产物文件始终是 UTF-8。
+    """
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if reconfigure is None:
+        return
+    try:
+        reconfigure(errors="replace")
+    except (ValueError, OSError):  # 流已被重定向或关闭
+        pass
+
+
 # ----------------------------------------------------------------------
 # 结果获取（读命令的唯一入口）
 # ----------------------------------------------------------------------
@@ -438,6 +454,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    _configure_stdout()
     args = build_parser().parse_args(argv)
     _anchor_args(args)
     try:
