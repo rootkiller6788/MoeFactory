@@ -182,6 +182,11 @@ python main.py visualize        # → out/report.html
 # 5. 测试
 python -m pytest                # 243 passed，约 18 秒
                                 # pyproject.toml 里已经默认 -q，不要再加一个
+
+# 6. 等价入口（不装包时用第一行；装过 pip install -e . 后第二种也行）
+PYTHONPATH=src python -m moefactory summary
+python -m moefactory summary
+make help                       # 常用命令一览（需要 make）
 ```
 
 ## A.3 CLI 契约
