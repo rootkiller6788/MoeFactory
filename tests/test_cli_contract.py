@@ -57,3 +57,19 @@ def test_check_exit_zero() -> None:
         pytest.skip("本项目没有 check 子命令")
     r = run_cli("check")
     assert r.returncode == 0, (r.stdout + r.stderr)[-2000:]
+
+
+def test_stdout_encoding_failure_is_softened(monkeypatch: pytest.MonkeyPatch) -> None:
+    """非 UTF-8 控制台下，``↔`` 之类的字符必须替换而不是抛异常。"""
+    from moefactory import cli
+
+    class FakeStream:
+        kwargs: dict[str, str] = {}
+
+        def reconfigure(self, **kwargs: str) -> None:
+            self.kwargs = kwargs
+
+    fake = FakeStream()
+    monkeypatch.setattr(cli.sys, "stdout", fake)
+    cli._configure_stdout()
+    assert fake.kwargs == {"errors": "replace"}
