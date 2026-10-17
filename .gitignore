@@ -4,3 +4,20 @@ __pycache__/
 out/
 .venv/
 *.egg-info/
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 构建 / 分发
+build/
+dist/
+
+# 覆盖率 / 日志
+.coverage
+htmlcov/
+*.log
