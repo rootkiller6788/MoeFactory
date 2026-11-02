@@ -41,6 +41,14 @@ def test_top_level_help() -> None:
     assert r.returncode == 0, r.stderr
 
 
+def test_version_flag() -> None:
+    import moefactory
+
+    r = run_cli("--version")
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.strip() == f"moefactory {moefactory.__version__}"
+
+
 def test_every_subcommand_help() -> None:
     subs = parse_subcommands(run_cli("--help").stdout)
     assert subs, "没从 --help 里解析出任何子命令"
