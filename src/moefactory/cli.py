@@ -26,6 +26,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from . import __version__
 from .config import expand_grid, grid_report, load_config, expectations_of
 from .corpus import build_corpus
 from .pipeline import OUT_FILES, PipelineResult, load_result, run_pipeline, write_outputs
@@ -400,6 +401,8 @@ def build_parser() -> argparse.ArgumentParser:
         prog="moefactory",
         description="MoEFactory —— Token → Expert 的路由系统放大镜",
     )
+    p.add_argument("--version", action="version", version=f"moefactory {__version__}",
+                   help="打印版本号并退出")
     p.add_argument("--config", default=DEFAULT_CONFIG, help="配置文件路径；相对路径按项目根解析")
     p.add_argument("--out", default="out", help="产物目录（只有 run / visualize 会写它）；相对路径按项目根解析")
     p.add_argument("--quiet", action="store_true", help="安静模式")
