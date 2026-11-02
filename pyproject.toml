@@ -6,6 +6,16 @@ build-backend = "setuptools.build_meta"
 name = "moefactory"
 version = "0.1.0"
 description = "MoEFactory —— Token → Expert 的路由系统放大镜（零第三方依赖）"
+readme = "README.md"
+keywords = ["moe", "mixture-of-experts", "routing", "load-balancing", "reproducibility"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 # 核心链路只用标准库。requires-python 下限由 math.sumprod 决定（CPython 3.12+），
 # 它是本项目的性能底线：专家前向占总 MACs 的 ~70%，手写三重循环会让整条
 # 24 个配置的网格从 20 秒变成 3 分钟。
