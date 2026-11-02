@@ -1,0 +1,3 @@
+# 开发期依赖 —— 核心链路仍然零第三方依赖（见 requirements.txt）。
+#   python -m pip install -r requirements-dev.txt
+pytest>=8
