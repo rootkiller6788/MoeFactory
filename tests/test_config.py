@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from moefactory.config import expand_grid, grid_report, load_config, validate_config
+from moefactory.schema import MoESpec
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -46,6 +47,12 @@ def test_unknown_axis_is_rejected(cfg: dict) -> None:
     bad["grid"]["groups"][0]["axes"]["bogus"] = [1]
     with pytest.raises(ValueError, match="未知轴"):
         validate_config(bad)
+
+
+def test_spec_ids_round_trip(cfg: dict) -> None:
+    """``from_spec_id`` 是 ``spec_id`` 的逆运算 —— 只读命令全靠它。"""
+    for spec in expand_grid(cfg):
+        assert MoESpec.from_spec_id(spec.spec_id) == spec
 
 
 def test_missing_seed_is_rejected(cfg: dict) -> None:
