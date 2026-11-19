@@ -99,6 +99,9 @@ def cmd_summary(args: argparse.Namespace) -> int:
 def cmd_grid(args: argparse.Namespace) -> int:
     r, cfg, cached = _result(args)
     gr = r.grid
+    if getattr(args, "json", False):
+        print(json.dumps(gr, ensure_ascii=False, indent=2))
+        return 0
     print(f"扇出网格：{gr.get('n_specs')} 格{_note(cached)}")
     print(f"  轴：{', '.join(gr.get('axes', []))}")
     for g in gr.get("groups", []):
@@ -409,7 +412,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("summary", help="版本 / 计数 / 下界 / 结论概览").set_defaults(func=cmd_summary)
-    sub.add_parser("grid", help="扇出网格与完整性").set_defaults(func=cmd_grid)
+    gr = sub.add_parser("grid", help="扇出网格与完整性")
+    gr.add_argument("--json", action="store_true", help="以 JSON 输出（供脚本消费）")
+    gr.set_defaults(func=cmd_grid)
     sub.add_parser("findings", help="逐条打印结论与证据").set_defaults(func=cmd_findings)
 
     m = sub.add_parser("matrix", help="对比矩阵（默认按均衡排序）")
