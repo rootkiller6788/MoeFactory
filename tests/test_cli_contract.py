@@ -41,6 +41,12 @@ def test_top_level_help() -> None:
     assert r.returncode == 0, r.stderr
 
 
+def test_help_lists_version_flag() -> None:
+    r = run_cli("--help")
+    assert r.returncode == 0
+    assert "--version" in r.stdout
+
+
 def test_version_flag() -> None:
     import moefactory
 
