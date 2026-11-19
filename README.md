@@ -136,6 +136,13 @@ _本 README 的「条目信息」字段来自 `factory-everything-项目总表.m
 
 ```
 L2-moefactory/
+├── .github/workflows/ci.yml  GitHub Actions：3.12 / 3.13 测试矩阵
+├── .editorconfig            编辑器约定（UTF-8 / LF / 4 空格）
+├── .gitattributes           仓库内统一 LF 换行
+├── Makefile                 常用命令封装（make help）
+├── CHANGELOG.md             版本记录
+├── CONTRIBUTING.md          贡献指南与三条硬纪律
+├── requirements-dev.txt     开发依赖（仅 pytest；核心链路仍零依赖）
 ├── configs/default.json      所有阈值与网格都在这里（代码里不硬编码任何阈值）
 ├── src/moefactory/
 │   ├── rng.py               确定性随机（sha256 派生种子，同配置必得同随机流）
@@ -153,7 +160,7 @@ L2-moefactory/
 │   ├── visualize.py         自包含 HTML（内联 SVG，零外部引用）
 │   └── cli.py               14 个子命令（12 只读 + 2 写）
 ├── tests/                   258 条测试，约 22 秒
-├── main.py                  入口（等价于 python -m moefactory.cli）
+├── main.py                  入口（等价于 python -m moefactory）
 └── out/                     产物（见 A.4）
 ```
 
