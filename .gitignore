@@ -21,3 +21,7 @@ dist/
 .coverage
 htmlcov/
 *.log
+
+# 类型检查 / lint 缓存
+.mypy_cache/
+.ruff_cache/
