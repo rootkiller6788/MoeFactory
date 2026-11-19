@@ -67,6 +67,12 @@ def test_check_exit_zero() -> None:
     assert r.returncode == 0, (r.stdout + r.stderr)[-2000:]
 
 
+def test_explain_unknown_spec_id_fails_cleanly() -> None:
+    r = run_cli("explain", "not-a-spec")
+    assert r.returncode == 1
+    assert "spec_id" in (r.stdout + r.stderr)
+
+
 def test_stdout_encoding_failure_is_softened(monkeypatch: pytest.MonkeyPatch) -> None:
     """非 UTF-8 控制台下，``↔`` 之类的字符必须替换而不是抛异常。"""
     from moefactory import cli
