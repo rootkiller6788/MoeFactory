@@ -27,3 +27,9 @@ python main.py --version
 ```
 
 提交信息用「类型: 说明」的形式（`feat` / `fix` / `test` / `docs` / `chore` / `ci`）。
+
+## CI
+
+`.github/workflows/ci.yml` 在 Python 3.12 / 3.13 上跑 `python -m pytest`；
+Dependabot 每周检查 pip 与 GitHub Actions 更新。本地跑同一条测试命令即可复现，
+CI 不做额外的静态检查。
