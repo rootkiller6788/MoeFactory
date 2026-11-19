@@ -67,6 +67,12 @@ def test_check_exit_zero() -> None:
     assert r.returncode == 0, (r.stdout + r.stderr)[-2000:]
 
 
+def test_task_runs_without_products() -> None:
+    r = run_cli("task")
+    assert r.returncode == 0, r.stderr
+    assert "domain_blind_floor" in r.stdout
+
+
 def test_explain_unknown_spec_id_fails_cleanly() -> None:
     r = run_cli("explain", "not-a-spec")
     assert r.returncode == 1
