@@ -159,7 +159,7 @@ L2-moefactory/
 │   ├── report.py            markdown 报告（含 ASCII Sankey 与散点）
 │   ├── visualize.py         自包含 HTML（内联 SVG，零外部引用）
 │   └── cli.py               14 个子命令（12 只读 + 2 写）
-├── tests/                   258 条测试，约 22 秒
+├── tests/                   263 条测试，约 22 秒
 ├── main.py                  入口（等价于 python -m moefactory）
 └── out/                     产物（见 A.4）
 ```
@@ -189,7 +189,7 @@ python main.py matrix --by loss
 python main.py visualize        # → out/report.html
 
 # 5. 测试
-python -m pytest                # 258 passed，约 22 秒
+python -m pytest                # 263 passed，约 22 秒
                                 # pyproject.toml 里已经默认 -q，不要再加一个
 
 # 6. 等价入口（不装包时用第一行；装过 pip install -e . 后第二种也行）
@@ -258,7 +258,7 @@ make help                       # 常用命令一览（需要 make）
   专家前向占总 MACs 的约 70%，内积走 C 实现是「24 个配置能在一分半内跑完」的前提。
 - 本机实测：CPython 3.13.14 / pytest 9.1.1。
 - 整条流水线：**100.0 秒**（24 格 + 15 次复核 = 39 次训练，每次 180 步）。
-- 测试套件：**258 条，约 22 秒**。
+- 测试套件：**263 条，约 22 秒**。
 - **非 UTF-8 控制台**：Windows 默认 GBK 不含 `↔`（U+2194），`findings` 曾因此抛
   `UnicodeEncodeError`。CLI 启动时把 stdout 的错误处理放宽为 `replace`，只读命令
   不再中断；`out/` 里的文件始终按 UTF-8 写。

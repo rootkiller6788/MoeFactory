@@ -1,5 +1,12 @@
 # 更新日志
 
+## 未发布
+
+- CLI `grid --json`：网格完整性结果可被脚本直接消费。
+- 新增 GitHub Actions（Python 3.12 / 3.13）与 Dependabot。
+- 补充贡献指南、`.gitattributes` 与开发依赖清单。
+- 测试覆盖模块入口、配置网格、`spec_id` 往返与 CLI 错误路径。
+
 ## 0.1.0 — 2026-11-02
 
 首个版本，测量型（Microscope）MoE 标本：
